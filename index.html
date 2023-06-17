@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>demo-ws</title>
+</head>
+
+<body>
+    <input type="text" id="inputBox" />
+    <p>WS:
+    <pre id="outputBox"></pre>
+    </p>
+    <script>
+        const ws = new WebSocket('ws://localhost:8080');
+        ws.addEventListener('open', (ev) => {
+            console.log('hello open', ev)
+            ws.send('hello server');
+        })
+        ws.addEventListener('clsoe', (ev) => {
+            console.log('bye close', ev)
+        })
+        ws.addEventListener('message', (ev) => {
+            console.log('ws-client have reviced message', ev)
+            outputBox.innerHTML += `<p>${new Date().toLocaleString()}：${ev.data}<p>`;
+        })
+        ws.addEventListener('error', (ev) => {
+            console.log('ws error', ev)
+        })
+
+        inputBox.addEventListener("keypress", (ev) => {
+            if (ev.key === 'Enter') {
+                ws.send(ev.target.value);
+            }
+        });
+
+    </script>
+</body>
+
+</html>
